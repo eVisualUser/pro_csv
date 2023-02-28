@@ -239,6 +239,26 @@ impl CSV {
 }
 
 impl CSV {
+    pub fn set(&mut self, line: usize, column: usize, element: String) {
+        match self.buffer.get_mut(line) {
+            Some(buffer_line) => match buffer_line.get_mut(column) {
+                Some(buffer_element) => {
+                    *buffer_element = element;
+                }
+                None => {
+                    self.append_column(String::new());
+                    self.correct_size();
+                    return self.set(line, column, element);
+                }
+            },
+            None => {
+                self.append_line(vec![]);
+                self.correct_size();
+                return self.set(line, column, element);
+            }
+        }
+    }
+
     pub fn insert_line(&mut self, index: usize, mut line: Vec<String>) {
         for _ in line.len()..self.get_column_count() {
             line.push(String::new());
@@ -293,5 +313,23 @@ impl CSV {
         let longer_line = self.get_longer_line();
         let lines = self.get_line_count();
         self.resize(longer_line, lines);
+    }
+}
+
+impl CSV {
+    pub fn swap_lines(&mut self, line_a: usize, line_b: usize) {
+        let line_a_content = self.get_all_element_of_line(line_a);
+        let line_b_content = self.get_all_element_of_line(line_b);
+        self.buffer[line_a] = line_b_content;
+        self.buffer[line_b] = line_a_content;
+    }
+
+    pub fn swap_columns(&mut self, column_a: usize, column_b: usize) {
+        for line in self.buffer.iter_mut() {
+            let element_a = line[column_a].clone();
+            let element_b = line[column_b].clone();
+            line[column_a] = element_b;
+            line[column_b] = element_a;
+        }
     }
 }
