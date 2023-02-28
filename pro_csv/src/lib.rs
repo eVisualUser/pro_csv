@@ -98,8 +98,8 @@ impl CSV {
             .write(true)
             .open(filename)
             .unwrap();
-
-        write!(&mut file, "{}", self.to_string())
+        file.write_all(String::new().as_bytes())?;
+        file.write_all(self.to_string().as_bytes())
     }
 }
 
@@ -225,5 +225,73 @@ impl CSV {
 
     pub fn get_size(&self) -> (usize, usize) {
         (self.get_line_count(), self.get_column_count())
+    }
+
+    pub fn get_longer_line(&self) -> usize {
+        let mut longer = 0_usize;
+        for line in &self.buffer {
+            if line.len() > longer {
+                longer = line.len();
+            }
+        }
+        return longer;
+    }
+}
+
+impl CSV {
+    pub fn insert_line(&mut self, index: usize, mut line: Vec<String>) {
+        for _ in line.len()..self.get_column_count() {
+            line.push(String::new());
+        }
+        self.buffer.insert(index, line);
+    }
+
+    pub fn append_line(&mut self, mut line: Vec<String>) {
+        for _ in line.len()..self.get_column_count() {
+            line.push(String::new());
+        }
+        self.buffer.push(line);
+    }
+
+    pub fn insert_column(&mut self, index: usize, value: String) {
+        for line in self.buffer.iter_mut() {
+            line.insert(index, value.clone());
+        }
+    }
+
+    pub fn append_column(&mut self, value: String) {
+        for line in self.buffer.iter_mut() {
+            line.push(value.clone());
+        }
+    }
+
+    pub fn resize(&mut self, columns: usize, lines: usize) {
+        let mut new_buffer = Vec::<Vec<String>>::new();
+        for line in &self.buffer {
+            let mut new_line = Vec::<String>::new();
+            for element in 0..line.len() {
+                if element <= columns {
+                    new_line.push(line[element].clone());
+                }
+            }
+            for _ in line.len()..columns {
+                new_line.push(String::new());
+            }
+            new_buffer.push(new_line);
+        }
+        for _ in self.buffer.len()..lines {
+            let mut line = Vec::<String>::new();
+            for _ in 0..columns {
+                line.push(String::new());
+            }
+            self.buffer.push(line);
+        }
+        self.buffer = new_buffer;
+    }
+
+    pub fn correct_size(&mut self) {
+        let longer_line = self.get_longer_line();
+        let lines = self.get_line_count();
+        self.resize(longer_line, lines);
     }
 }
