@@ -208,6 +208,10 @@ impl CSV {
         None
     }
 
+    pub fn get_with_headers(&self, x: usize, y: usize) -> Option<String> {
+        self.get(x + 1, y + 1)
+    }
+
     pub fn get_all(&self) -> Vec<Vec<String>> {
         self.buffer.clone()
     }
