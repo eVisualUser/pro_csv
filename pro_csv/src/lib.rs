@@ -317,19 +317,43 @@ impl CSV {
 }
 
 impl CSV {
-    pub fn swap_lines(&mut self, line_a: usize, line_b: usize) {
+    pub fn swap_lines(&mut self, line_a: usize, line_b: usize) -> Result<(), String> {
+        let line_count = self.get_line_count();
+        if line_a > line_count || line_b > line_count {
+            return Err(format!(
+                "One of the two line are out of bounds: A({}) B({}), csv size: {:?}",
+                line_a,
+                line_b,
+                self.get_size()
+            ));
+        }
+
         let line_a_content = self.get_all_element_of_line(line_a);
         let line_b_content = self.get_all_element_of_line(line_b);
         self.buffer[line_a] = line_b_content;
         self.buffer[line_b] = line_a_content;
+
+        Ok(())
     }
 
-    pub fn swap_columns(&mut self, column_a: usize, column_b: usize) {
+    pub fn swap_columns(&mut self, column_a: usize, column_b: usize) -> Result<(), String> {
+        let column_count = self.get_column_count();
+        if column_a > column_count || column_b > column_count {
+            return Err(format!(
+                "One of the two column are out of bounds: A({}) B({}), csv size: {:?}",
+                column_a,
+                column_b,
+                self.get_size()
+            ));
+        }
+
         for line in self.buffer.iter_mut() {
             let element_a = line[column_a].clone();
             let element_b = line[column_b].clone();
             line[column_a] = element_b;
             line[column_b] = element_a;
         }
+
+        Ok(())
     }
 }

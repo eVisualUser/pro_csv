@@ -45,10 +45,10 @@ fn main() {
     csv.set(0, 0, String::from("SET"));
 
     println!("\n# Reverse two lines");
-    csv.swap_lines(0, 1);
+    csv.swap_lines(0, 1).unwrap();
 
     println!("\n# Reverse two columns");
-    csv.swap_columns(0, 1);
+    csv.swap_columns(0, 1).unwrap();
 
     csv.save("demo.csv").unwrap();
 }
