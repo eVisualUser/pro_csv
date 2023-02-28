@@ -63,3 +63,10 @@ impl CSV {
         result
     }
 }
+
+impl CSV {
+    pub fn load_from_file(&mut self, filename: &str) {
+        let file = std::fs::read_to_string(filename).unwrap();
+        self.load(&file);
+    }
+}
