@@ -2,6 +2,11 @@
 name = "pro_csv"
 version = "0.1.0"
 edition = "2021"
+description = "Easy to use CSV Reader/Writer"
+license = "MIT"
+readme = "README.md"
+keywords = ["file", "read", "write", "parse", "csv"]
+repository = "https://github.com/eVisualUser/pro_csv"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
