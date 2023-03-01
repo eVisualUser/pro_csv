@@ -22,8 +22,16 @@ fn main() {
         csv.find_lines_index_with_name("a")
     );
     println!(
+        "\n# Line that contain something\n\n{:?}",
+        csv.find_lines_index_that_contains("a")
+    );
+    println!(
         "\n# Line content\n\n{:?}",
         csv.get_all_element_of_line(csv.find_line_index_with_name("a").unwrap())
+    );
+    println!(
+        "\n# Line content using contains\n\n{:?}",
+        csv.get_all_element_of_line(csv.find_line_index_that_contains("a").unwrap())
     );
 
     println!("\n# Get at specific location\n\n{:?}", csv.get(1, 1));
@@ -31,40 +39,48 @@ fn main() {
         "\n# Get at specific location with headers\n\n{:?}",
         csv.get_with_headers(0, 0)
     );
+
     println!("\n# Get line count\n\n{:?}", csv.get_line_count());
     println!("\n# Get column count\n\n{:?}", csv.get_column_count());
 
     // Insert
 
-    println!("\n# Insert line");
+    println!();
+
+    println!("# Insert line");
     csv.insert_line(0, vec![String::from("insert_line")]);
-    println!("\n# Insert column");
+    println!("# Insert column");
     csv.insert_column(0, String::from("insert_column"));
 
     // Append
 
-    println!("\n# Append line");
+    println!("# Append line");
     csv.append_line(vec![String::from("append_line")]);
-    println!("\n# Append column");
+    println!("# Append column");
     csv.append_column(String::from("append_column"));
 
-    println!("\n# Correct the size");
+    println!("# Correct the size");
     csv.correct_size();
 
     // Set
 
-    println!("\n# Set an element");
+    println!("# Set an element");
     // Tips: You can set an element out of the current table
     // it will append lines/columns until it have the good size
     csv.set(0, 0, String::from("SET"));
 
     // Swap
 
-    println!("\n# Swap two lines");
+    println!("# Swap two lines");
     csv.swap_lines(0, 1).unwrap();
 
-    println!("\n# Swap two columns");
+    println!("# Swap two columns");
     csv.swap_columns(0, 1).unwrap();
+
+    println!("# Remove line if exist");
+    csv.remove_line(0);
+    println!("# Remove column column if exist");
+    csv.remove_column(0);
 
     // Save/Write to file
 

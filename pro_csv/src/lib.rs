@@ -448,3 +448,10 @@ impl CSV {
         }
     }
 }
+
+impl Iterator for CSV {
+    type Item = Vec<String>;
+    fn next(&mut self) -> Option<<Self as Iterator>::Item> {
+        self.buffer.pop()
+    }
+}

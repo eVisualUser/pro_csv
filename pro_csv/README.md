@@ -2,9 +2,19 @@
 
 Easy to use CSV read/write library.
 
+## List of features
+
+- [X] Read at index
+- [X] Set at index
+- [X] Find line and column using headers
+- [X] Insert and Append lines/columns
+- [X] Remove lines/columns
+- [X] Resize the table
+- [X] Save to file
+
 ## Example
 
-### Code
+<details> Code
 
 ```rust
 
@@ -82,8 +92,9 @@ fn main() {
 }
 
 ```
+</details>
 
-### Terminal
+<details> Terminal OutPut
 
 ```md
 # Debug
@@ -141,8 +152,8 @@ Some("a")
 # Reverse two columns
 
 ```
-
-### File "demo.csv"
+</details>
+<details> File "demo.csv" OutPut
 
 ```csv
 a;insert_column;b;c;d;append_column;;;;;;;
@@ -150,3 +161,4 @@ insert_line;SET;;;;append_column;;;;;;;
 a;insert_column;b;c;d;d;d;d;d;d;d;append_column;
 ;append_line;;;;append_column;;;;;;;
 ```
+</details>
