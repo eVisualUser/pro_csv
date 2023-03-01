@@ -1,6 +1,6 @@
 fn main() {
     let mut csv = pro_csv::CSV::default();
-    csv.load("a;b;c;d\na;b;c;d;d;d;d;d;d;d;\n"); // csv.load_from_file("demo.csv") exsits
+    csv.load("a;b;c;d\na;b;c;d;d;d;d;d;d;d;\n"); // csv.load_from_file("demo.csv") exist
 
     // Debug & Output
 
