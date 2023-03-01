@@ -96,10 +96,11 @@ impl CSV {
         let mut file = std::fs::File::options()
             .create(true)
             .write(true)
+            .truncate(true)
             .open(filename)
             .unwrap();
-        file.write_all(String::new().as_bytes())?;
-        file.write_all(self.to_string().as_bytes())
+        file.write(self.to_string().as_bytes()).unwrap();
+        Ok(())
     }
 }
 
@@ -121,11 +122,42 @@ impl CSV {
         result
     }
 
+    pub fn find_columns_index_that_contains(&self, contained: &str) -> Vec<usize> {
+        let mut result = Vec::<usize>::new();
+
+        match self.buffer.first() {
+            Some(line) => {
+                for column in 0..line.len() {
+                    if line[column].contains(contained) {
+                        result.push(column);
+                    }
+                }
+            }
+            None => (),
+        }
+
+        result
+    }
+
     pub fn find_column_index_with_name(&self, name: &str) -> Option<usize> {
         match self.buffer.first() {
             Some(line) => {
                 for column in 0..line.len() {
                     if line[column] == name {
+                        return Some(column);
+                    }
+                }
+            }
+            None => (),
+        };
+        None
+    }
+
+    pub fn find_column_index_that_contains(&self, contained: &str) -> Option<usize> {
+        match self.buffer.first() {
+            Some(line) => {
+                for column in 0..line.len() {
+                    if line[column].contains(contained) {
                         return Some(column);
                     }
                 }
@@ -167,11 +199,42 @@ impl CSV {
         result
     }
 
+    pub fn find_lines_index_that_contains(&self, contained: &str) -> Vec<usize> {
+        let mut result = Vec::<usize>::new();
+
+        for line in 0..self.buffer.len() {
+            match self.buffer[line].first() {
+                Some(line_name) => {
+                    if line_name.contains(contained) {
+                        result.push(line);
+                    }
+                }
+                None => (),
+            }
+        }
+
+        result
+    }
+
     pub fn find_line_index_with_name(&self, name: &str) -> Option<usize> {
         for line in 0..self.buffer.len() {
             match self.buffer[line].first() {
                 Some(line_name) => {
                     if line_name == name {
+                        return Some(line);
+                    }
+                }
+                None => (),
+            }
+        }
+        None
+    }
+
+    pub fn find_line_index_that_contains(&self, contained: &str) -> Option<usize> {
+        for line in 0..self.buffer.len() {
+            match self.buffer[line].first() {
+                Some(line_name) => {
+                    if line_name.contains(contained) {
                         return Some(line);
                     }
                 }
@@ -359,5 +422,29 @@ impl CSV {
         }
 
         Ok(())
+    }
+}
+
+impl CSV {
+    pub fn get_buffer_mut(&mut self) -> &mut Vec<Vec<String>> {
+        return &mut self.buffer;
+    }
+
+    pub fn clear(&mut self) {
+        self.buffer.clear();
+    }
+
+    pub fn remove_line(&mut self, line: usize) {
+        if line < self.get_line_count() {
+            self.buffer.remove(line);
+        }
+    }
+
+    pub fn remove_column(&mut self, column: usize) {
+        for line in self.buffer.iter_mut() {
+            if column < line.len() {
+                line.remove(column);
+            }
+        }
     }
 }
