@@ -14,7 +14,8 @@ Easy to use CSV read/write library.
 
 ## Example
 
-<details> Code
+<details>
+<summary>Code</summary>
 
 ```rust
 
@@ -94,7 +95,8 @@ fn main() {
 ```
 </details>
 
-<details> Terminal OutPut
+<details>
+<summary>Terminal OutPut</summary>
 
 ```md
 # Debug
@@ -153,7 +155,9 @@ Some("a")
 
 ```
 </details>
-<details> File "demo.csv" OutPut
+
+<details>
+<summary>File OutPut</summary>
 
 ```csv
 a;insert_column;b;c;d;append_column;;;;;;;
