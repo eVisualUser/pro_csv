@@ -3,6 +3,8 @@ use std::io::Write;
 pub struct CSV {
     separator: char,
     buffer: Vec<Vec<String>>,
+    comment: char,
+    comments: bool,
 }
 
 impl Default for CSV {
@@ -10,6 +12,8 @@ impl Default for CSV {
         Self {
             separator: ';',
             buffer: Vec::new(),
+            comment: '#',
+            comments: false,
         }
     }
 }
@@ -21,6 +25,22 @@ impl CSV {
 
     pub fn get_sperator_char(&self) -> char {
         self.separator
+    }
+
+    pub fn set_comment_char(&mut self, comment: char) {
+        self.comment = comment;
+    }
+
+    pub fn get_comment_char(&self) -> char {
+        self.comment
+    }
+
+    pub fn allow_comments(&mut self, value: bool) {
+        self.comments = value;
+    }
+
+    pub fn toggle_comments(&mut self) {
+        self.comments = !self.comments;
     }
 }
 
@@ -49,8 +69,10 @@ impl CSV {
         let mut result = Vec::<String>::new();
 
         let mut buffer = String::new();
-        for i in line.chars() {
-            if i != self.separator {
+        'forloop: for i in line.chars() {
+            if self.comments && i == self.comment {
+                break 'forloop;
+            } else if i != self.separator {
                 buffer.push(i);
             } else if !buffer.is_empty() {
                 result.push(buffer);
